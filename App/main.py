@@ -97,7 +97,6 @@ def extract_text_from_pdf(pdf_file):
         for page in pdf_reader.pages:
             text += page.extract_text() + "\n"
         
-        print("Extracted text:", text)  # Debugging line
         return text.strip()
     except Exception as e:
         st.error(f"Error reading PDF: {str(e)}")
@@ -106,10 +105,12 @@ def extract_text_from_pdf(pdf_file):
  
 
 def generate_application_email(job_description, resume_text):
-    
-    if not job_description:
+    print("Generating email with job description:", job_description)
+    if  job_description['role']=="" :
         st.warning("⚠️ No job description at Url. ")
+        print("No job description at Url")
         return " No job description at Url"
+    
     email = email_writer.generate_email(job_description, resume_text)
     return  email
    
@@ -198,12 +199,13 @@ def main():
             status_text.empty()
             
             # Display success message
-            st.markdown("""
-            <div class="status-success">
-                <strong>🎉 Success!</strong> Your application email has been generated successfully.
-            </div>
-            """, unsafe_allow_html=True)
-            
+            if email_content != " No job description at Url":
+                st.markdown("""
+                <div class="status-success">
+                    <strong>🎉 Success!</strong> Your application email has been generated successfully.
+                </div>
+                """, unsafe_allow_html=True)
+                
         except Exception as e:
             progress_bar.empty()
             status_text.empty()
@@ -218,21 +220,22 @@ def main():
     if 'email_content' in locals():
          
         # Email preview with copy functionality
-        st.subheader("📋 Email Content")
-        st.text_area(
-            "Generated Email (Ready to Copy)",
-            value=email_content,
-            height=400,
-            help="Copy this email content and paste it into your email client. Review and customize as needed."
-        )
-        
-        # Action buttons
-        col1, col2, col3 = st.columns(3)
-        
-        with col1:
-            if st.button("📋 Copy to Clipboard", key="copy_btn"):
-                st.info("💡 Use Ctrl+A to select all, then Ctrl+C to copy the email content above")
-        
+        if email_content!="No job description at Url":
+            st.subheader("📋 Email Content")
+            st.text_area(
+                "Generated Email (Ready to Copy)",
+                value=email_content,
+                height=400,
+                help="Copy this email content and paste it into your email client. Review and customize as needed."
+            )
+            
+            # Action buttons
+            col1, col2, col3 = st.columns(3)
+            
+            with col1:
+                if st.button("📋 Copy to Clipboard", key="copy_btn"):
+                    st.info("💡 Use Ctrl+A to select all, then Ctrl+C to copy the email content above")
+            
    
   
 
