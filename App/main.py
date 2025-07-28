@@ -107,6 +107,9 @@ def extract_text_from_pdf(pdf_file):
 
 def generate_application_email(job_description, resume_text):
     
+    if not job_description:
+        st.warning("⚠️ No job description at Url. ")
+        return " No job description at Url"
     email = email_writer.generate_email(job_description, resume_text)
     return  email
    

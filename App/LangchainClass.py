@@ -33,6 +33,10 @@ only one object in this format
      "skills": "",
     "description": ""
     ***
+    
+    if page_data does not contain any job postings, return an empty JSON object .
+    
+    
 """
 
 
